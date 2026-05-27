@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Yoii 🤍</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{
+font-family:system-ui,sans-serif;
+overflow:hidden;
+height:100vh;
+background:linear-gradient(135deg,#ffd9e8,#fff8ef,#efe6ff);
+}
+.screen{
+position:absolute;inset:0;
+display:flex;justify-content:center;align-items:center;
+padding:24px;text-align:center;
+opacity:0;transform:scale(.95);
+transition:all .8s ease;
+}
+.active{opacity:1;transform:scale(1)}
+.card{
+background:rgba(255,255,255,.55);
+backdrop-filter:blur(14px);
+padding:30px;border-radius:28px;
+max-width:760px;
+box-shadow:0 10px 40px rgba(0,0,0,.08);
+}
+h1{font-size:3rem;color:#ff5d95;margin-bottom:10px}
+.text{font-size:1.6rem;color:#444;min-height:110px;line-height:1.6}
+.btn{
+margin-top:20px;padding:14px 24px;border:none;
+border-radius:999px;background:#ff6fa4;color:white;
+cursor:pointer;font-size:1rem;
+}
+.pet{
+position:absolute;bottom:15px;font-size:60px;
+animation:walk 14s linear infinite;
+}
+@keyframes walk{from{left:-100px}to{left:110%}}
+.float{position:absolute;animation:rise 8s linear forwards}
+@keyframes rise{from{transform:translateY(100vh)}to{transform:translateY(-100px)}}
+.music{
+position:fixed;top:15px;right:15px;z-index:99;
+padding:10px 14px;border:none;border-radius:999px;
+background:white;cursor:pointer;
+}
+.gallery{
+display:grid;grid-template-columns:1fr 1fr;
+gap:12px;margin-top:18px;
+}
+.ph{
+height:120px;border-radius:16px;
+background:rgba(255,255,255,.7);
+display:flex;align-items:center;justify-content:center;
+color:#888;
+}
+.heart{font-size:120px;animation:pulse 1.4s infinite}
+@keyframes pulse{50%{transform:scale(1.15)}}
+</style>
+</head>
+<body>
+
+<button class="music" onclick="toggleMusic()">🎵</button>
+<audio id="bgm" loop>
+<source src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8f6f0f9f7.mp3?filename=sweet-piano-110188.mp3">
+</audio>
+
+<div class="screen active">
+<div class="card">
+<h1>Yoii 🤍</h1>
+<div class="text" data-text="A tiny place on the internet made only for you."></div>
+<button class="btn">Open 🌸</button>
+</div>
+<div class="pet">🐶</div>
+</div>
+
+<div class="screen">
+<div class="card">
+<div class="text" data-text="Drink your water. Your future self will thank you. 💧"></div>
+<button class="btn">Next</button>
+</div>
+<div class="pet">🐱</div>
+</div>
+
+<div class="screen">
+<div class="card">
+<div class="text" data-text="Get some rest. Even the stars disappear for a while every day. 🌙"></div>
+<button class="btn">Next</button>
+</div>
+<div class="pet">🐰</div>
+</div>
+
+<div class="screen">
+<div class="card">
+<div class="text" data-text="Stop overthinking. Not every cloud is a storm. 🌷"></div>
+<button class="btn">Next</button>
+</div>
+<div class="pet">🦊</div>
+</div>
+
+<div class="screen">
+<div class="card">
+<div class="text" data-text="Be gentle with yourself today. 🤍"></div>
+<div class="gallery">
+<div class="ph">📷 Add Your Photo</div>
+<div class="ph">📷 Add Her Photo</div>
+</div>
+<button class="btn">Next</button>
+</div>
+<div class="pet">🐼</div>
+</div>
+
+<div class="screen">
+<div class="card">
+<div class="text" data-text="And if nobody has reminded you lately..."></div>
+<button class="btn">❤️</button>
+</div>
+<div class="pet">🦦</div>
+</div>
+
+<div class="screen">
+<div class="card">
+<div class="heart">❤️</div>
+<div class="text" data-text="I love you."></div>
+<p style="margin-top:10px;color:#666">Have a beautiful day, Yoii.</p>
+</div>
+<div class="pet">🐶 🐱 🐰 🦦 🐼</div>
+</div>
+
+<script>
+let c=0;
+const screens=document.querySelectorAll('.screen');
+const btns=document.querySelectorAll('.btn');
+
+function type(el,t){
+el.innerHTML='';
+let i=0;
+let x=setInterval(()=>{
+el.innerHTML+=t.charAt(i);
+i++;
+if(i>=t.length) clearInterval(x);
+},35);
+}
+
+function show(n){
+screens.forEach(s=>s.classList.remove('active'));
+screens[n].classList.add('active');
+const e=screens[n].querySelector('.text');
+if(e) type(e,e.dataset.text);
+}
+show(0);
+
+btns.forEach(b=>b.onclick=()=>{
+if(c<screens.length-1){c++;show(c);}
+});
+
+let start=0;
+document.addEventListener('touchstart',e=>start=e.touches[0].clientX);
+document.addEventListener('touchend',e=>{
+if(start-e.changedTouches[0].clientX>50 && c<screens.length-1){c++;show(c);}
+});
+
+setInterval(()=>{
+const d=document.createElement('div');
+d.className='float';
+d.innerHTML=['🤍','💕','✨','🌸','🐾'][Math.floor(Math.random()*5)];
+d.style.left=Math.random()*100+'vw';
+d.style.fontSize=(20+Math.random()*20)+'px';
+document.body.appendChild(d);
+setTimeout(()=>d.remove(),8000);
+},400);
+
+function toggleMusic(){
+const a=document.getElementById('bgm');
+if(a.paused)a.play(); else a.pause();
+}
+</script>
+</body>
+</html>
